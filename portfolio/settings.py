@@ -4,9 +4,9 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Security
-SECRET_KEY = 'replace-this-with-env-secret'   # Production এ .env ব্যবহার করবে
-DEBUG = True
-ALLOWED_HOSTS = []   # Deploy করলে ['yourdomain.com'] লিখতে হবে
+SECRET_KEY = 'replace-this-with-env-secret'   
+DEBUG = False  
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 INSTALLED_APPS = [
@@ -16,11 +16,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Third party apps future এ লাগতে পারে
-    # 'crispy_forms',
-    # 'rest_framework',
-
-    'core',   # আমাদের Portfolio app
+    'core',  
 ]
 
 MIDDLEWARE = [
@@ -31,6 +27,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'portfolio.urls'
@@ -38,7 +35,7 @@ ROOT_URLCONF = 'portfolio.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],   # custom templates folder
+        'DIRS': [BASE_DIR / 'templates'],   
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -56,7 +53,7 @@ WSGI_APPLICATION = 'portfolio.wsgi.application'
 # Database (default: SQLite)
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',   # সহজের জন্য SQLite
+        'ENGINE': 'django.db.backends.sqlite3',   
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
@@ -87,6 +84,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [ BASE_DIR / 'static' ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
