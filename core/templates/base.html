@@ -1,0 +1,978 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}AJ Srabon - Full Stack Developer{% endblock %}</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-gradient: linear-gradient(135deg, #6232ff 0%, #2600ff 100%);
+      --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --accent-gradient: linear-gradient(135deg, #4facfe 0%, #ff00d4 100%);
+      --dark-bg: #0a0a0b;
+      --dark-surface: #1a1a1d;
+      --dark-surface-alt: #242428;
+      --dark-border: #2d2d32;
+      --light-text: #f8fafc;
+      --muted-text: #94a3b8;
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --shadow-primary: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      line-height: 1.7;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      color: #1e293b;
+    }
+
+    /* Dark mode styles */
+    body.dark-mode {
+      background: var(--dark-bg);
+      color: var(--light-text);
+    }
+
+    body.dark-mode::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background:
+        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.15) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Enhanced Navbar */
+    .navbar-modern {
+      background: rgba(255, 255, 255, 0.95) !important;
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0.8rem 0;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      z-index: 1050;
+    }
+
+    .navbar-modern.scrolled {
+      padding: 0.5rem 0;
+      backdrop-filter: blur(30px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .dark-mode .navbar-modern {
+      background: rgba(26, 26, 29, 0.95) !important;
+      border-bottom: 1px solid #333;
+      color: white;
+    }
+
+    .navbar-brand img {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 10%;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand:hover img {
+      transform: scale(1.05) rotate(5deg);
+    }
+
+    .nav-link {
+      font-weight: 500;
+      margin: 0 0.3rem;
+      padding: 0.5rem 1rem !important;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      color: #121212;
+    }
+
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--primary-gradient);
+      transition: left 0.4s ease;
+      z-index: -1;
+      border-radius: 25px;
+    }
+
+    .nav-link:hover {
+      color: white !important;
+      transform: translateY(-2px);
+    }
+
+    .nav-link:hover::before {
+      left: 0;
+    }
+
+    /* Active nav link */
+    .nav-link.active {
+      background: var(--primary-gradient);
+      color: white !important;
+    }
+
+    /* Dark mode nav-links */
+    .dark-mode .nav-link {
+      color: white !important;
+    }
+
+    .dark-mode .nav-link:hover {
+      color: white !important;
+    }
+
+    /* Dark Mode Toggle */
+    .dark-toggle {
+      position: relative;
+      width: 50px;
+      height: 25px;
+      background: var(--primary-gradient);
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .dark-toggle::before {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 21px;
+      height: 21px;
+      background: white;
+      border-radius: 50%;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .dark-mode .dark-toggle::before {
+      transform: translateX(25px);
+    }
+
+    .dark-toggle i {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .dark-toggle .fa-moon {
+      left: 6px;
+      color: white;
+      opacity: 1;
+    }
+
+    .dark-toggle .fa-sun {
+      right: 6px;
+      color: #fbbf24;
+      opacity: 0;
+    }
+
+    .dark-mode .dark-toggle .fa-moon {
+      opacity: 0;
+    }
+
+    .dark-mode .dark-toggle .fa-sun {
+      opacity: 1;
+    }
+
+    /* Enhanced Cards */
+    .card-modern {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--shadow-primary);
+      overflow: hidden;
+    }
+
+    .dark-mode .card-modern {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--light-text);
+    }
+
+    .card-modern:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: var(--shadow-xl);
+    }
+
+    /* Card hover effect */
+    .card-modern::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .card-modern:hover::after {
+      opacity: 1;
+    }
+
+    /* List Items */
+    .list-group-item-modern {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 1rem 0;
+      transition: all 0.3s ease;
+    }
+
+    .dark-mode .list-group-item-modern {
+      border-bottom: 1px solid var(--dark-border);
+      color: var(--light-text);
+    }
+
+    .list-group-item-modern:hover {
+      background: rgba(0, 0, 0, 0.02);
+      padding-left: 1rem;
+    }
+
+    .dark-mode .list-group-item-modern:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Enhanced Footer */
+    .footer-modern {
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      backdrop-filter: blur(20px);
+      margin-top: 5rem;
+    }
+
+    .dark-mode .footer-modern {
+      background: var(--dark-surface);
+      border-top: 1px solid var(--dark-border);
+    }
+
+    /* Scroll to top button */
+    .scroll-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 50px;
+      height: 50px;
+      background: var(--primary-gradient);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 0;
+      visibility: hidden;
+      z-index: 1000;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .scroll-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .scroll-top:hover {
+      transform: translateY(-5px) scale(1.1);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Smooth scrolling */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Enhanced animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .fade-in-up {
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    .float-animation {
+      animation: float 5s ease-in-out infinite;
+    }
+
+    /* Loading state */
+    .loading {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .loading::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      animation: loading 1.5s infinite;
+    }
+
+    @keyframes loading {
+      0% {
+        left: -100%;
+      }
+
+      100% {
+        left: 100%;
+      }
+    }
+
+    /* Responsive improvements */
+    @media (max-width: 992px) {
+      .navbar-collapse {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 15px;
+        padding: 1rem;
+        margin-top: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .dark-mode .navbar-collapse {
+        background: rgba(26, 26, 29, 0.95);
+      }
+
+      .nav-link {
+        margin: 0.3rem 0;
+        text-align: center;
+      }
+
+      .navbar-nav {
+        padding: 1rem 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar-brand img {
+        height: 50px;
+      }
+
+      .nav-link {
+        margin: 0.2rem 0;
+        text-align: center;
+      }
+
+      .card-modern {
+        margin-bottom: 1.5rem;
+      }
+
+      .navbar-modern {
+        padding: 0.7rem 0;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .navbar-brand img {
+        height: 40px;
+      }
+
+      .dark-toggle {
+        width: 45px;
+        height: 22px;
+      }
+
+      .dark-toggle::before {
+        width: 18px;
+        height: 18px;
+      }
+
+      .dark-mode .dark-toggle::before {
+        transform: translateX(23px);
+      }
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary-gradient);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--secondary-gradient);
+    }
+
+    /* Enhanced buttons */
+    .btn-modern {
+      background: var(--primary-gradient);
+      border: none;
+      color: white;
+      padding: 0.75rem 2rem;
+      border-radius: 30px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-modern:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      color: white;
+    }
+
+    .btn-modern::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: left 0.5s ease;
+    }
+
+    .btn-modern:hover::before {
+      left: 100%;
+    }
+
+    /* Navbar toggler default light mode */
+    .navbar-toggler {
+      border: none;
+      padding: 0.25rem 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .navbar-toggler:focus {
+      box-shadow: none;
+    }
+
+    .navbar-toggler .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(18,18,18,1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+      transition: all 0.3s ease;
+      width: 1.2em;
+      height: 1.2em;
+    }
+
+    /* Dark mode toggler icon white */
+    .dark-mode .navbar-toggler .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255,1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    }
+
+    /* Hide main content initially */
+    .hidden-content {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
+    }
+
+    /* Show content after loader */
+    .show-content {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Loading Overlay */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 1;
+      transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .loading-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Logo Wrapper */
+    .logo-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    /* Loader Logo */
+    .loader-logo {
+      width: 120px;
+      height: auto;
+      border-radius: 50%;
+      z-index: 2;
+      position: relative;
+      animation: logoPulse 2s infinite ease-in-out;
+    }
+
+    /* Glowing Circles */
+    .glow-circle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: rgb(56, 56, 56);
+      transform: translate(-50%, -50%) scale(0.5);
+      opacity: 0.6;
+      z-index: 1;
+      animation: glowPulse 3s infinite;
+    }
+
+    .glow-circle:nth-child(2) {
+      animation-delay: 1s;
+    }
+
+    .glow-circle:nth-child(3) {
+      animation-delay: 2s;
+    }
+
+    /* Animations */
+    @keyframes logoPulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    @keyframes glowPulse {
+      0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0.6;
+      }
+
+      100% {
+        transform: translate(-50%, -50%) scale(1.8);
+        opacity: 0;
+      }
+    }
+
+    /* Particle animation background */
+    .particles-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      opacity: 0.3;
+      animation: float 15s infinite linear;
+    }
+
+    @keyframes particleFloat {
+      0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+      }
+
+      100% {
+        transform: translateY(-100vh) translateX(100px) rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Particle Background -->
+  <div class="particles-container" id="particles"></div>
+
+  <!-- Enhanced Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-modern fixed-top" id="mainNavbar">
+    <div class="container">
+      <a class="navbar-brand" href="#hero">
+        <img src="https://i.postimg.cc/dVJjxx6H/Whats-App-Image-2025-09-08-at-19-42-33-0ce37595-removebg-preview.png"
+          alt="AJ Srabon" height="75">
+      </a>
+
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto me-4">
+          <li class="nav-item"><a class="nav-link" href="#hero"><i class="fas fa-home me-1"></i>Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#about"><i class="fas fa-user me-1"></i>About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#skills"><i class="fas fa-code me-1"></i>Skills</a></li>
+          <li class="nav-item"><a class="nav-link" href="#education"><i
+                class="fas fa-graduation-cap me-1"></i>Education</a></li>
+          <li class="nav-item"><a class="nav-link" href="#projects"><i class="fas fa-folder-open me-1"></i>Projects</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="#contact"><i class="fas fa-envelope me-1"></i>Contact</a></li>
+        </ul>
+
+        <!-- Dark Mode Toggle -->
+        <button id="darkToggle" class="dark-toggle">
+          <i class="fas fa-moon"></i>
+          <i class="fas fa-sun"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="logo-wrapper">
+      <img src="https://i.postimg.cc/dVJjxx6H/Whats-App-Image-2025-09-08-at-19-42-33-0ce37595-removebg-preview.png"
+        alt="Logo" class="loader-logo">
+      <span class="glow-circle"></span>
+      <span class="glow-circle"></span>
+      <span class="glow-circle"></span>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main id="mainContent" class="hidden-content" style="margin-top: 100px;">
+    {% block content %}
+    <div class="container my-5">
+      <div class="row">
+        <div class="col-12 text-center mb-5">
+          <h1 class="display-4 fw-bold fade-in-up">Welcome to My Portfolio</h1>
+          <p class="lead text-muted fade-in-up">Full Stack Developer & UI/UX Designer</p>
+          <button class="btn btn-modern fade-in-up mt-3">
+            <i class="fas fa-download me-2"></i>Download CV
+          </button>
+        </div>
+      </div>
+
+      <!-- Sample Cards -->
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card card-modern h-100">
+            <div class="card-body text-center p-4">
+              <div class="mb-3">
+                <i class="fas fa-code fa-3x text-primary"></i>
+              </div>
+              <h5 class="card-title">Frontend Development</h5>
+              <p class="card-text text-muted">Creating beautiful and responsive user interfaces with modern
+                technologies.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card card-modern h-100">
+            <div class="card-body text-center p-4">
+              <div class="mb-3">
+                <i class="fas fa-server fa-3x text-success"></i>
+              </div>
+              <h5 class="card-title">Backend Development</h5>
+              <p class="card-text text-muted">Building robust and scalable server-side applications and APIs.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card card-modern h-100">
+            <div class="card-body text-center p-4">
+              <div class="mb-3">
+                <i class="fas fa-paint-brush fa-3x"
+                  style="background: var(--secondary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
+              </div>
+              <h5 class="card-title">UI/UX Design</h5>
+              <p class="card-text text-muted">Designing intuitive and engaging user experiences that delight users.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endblock %}
+  </main>
+
+  <!-- Enhanced Footer -->
+  <footer class="footer-modern text-center py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <p class="mb-2">&copy; 2025 AJ Srabon. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-top" id="scrollTop">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Dark mode functionality
+    const darkToggle = document.getElementById('darkToggle');
+    const body = document.body;
+    const scrollTopBtn = document.getElementById('scrollTop');
+    const navbar = document.getElementById('mainNavbar');
+
+    // Load saved theme
+    const savedTheme = sessionStorage.getItem('darkMode');
+    if (savedTheme === 'enabled') {
+      body.classList.add('dark-mode');
+    }
+
+    // Dark mode toggle
+    darkToggle.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+
+      if (body.classList.contains('dark-mode')) {
+        sessionStorage.setItem('darkMode', 'enabled');
+      } else {
+        sessionStorage.setItem('darkMode', 'disabled');
+      }
+    });
+
+    // Scroll to top functionality
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        scrollTopBtn.classList.add('visible');
+      } else {
+        scrollTopBtn.classList.remove('visible');
+      }
+
+      // Navbar scroll effect
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    scrollTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+
+          // Close navbar on mobile after click
+          const navbarToggler = document.querySelector('.navbar-toggler');
+          const navbarCollapse = document.querySelector('.navbar-collapse');
+          if (navbarCollapse.classList.contains('show')) {
+            navbarToggler.click();
+          }
+        }
+      });
+    });
+
+    // Add fade-in animation to elements when they come into view
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    // Observe all cards for animation
+    document.addEventListener('DOMContentLoaded', () => {
+      const cards = document.querySelectorAll('.card-modern');
+      cards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = 'all 0.6s ease-out';
+        observer.observe(card);
+      });
+
+      // Create particle background
+      createParticles();
+    });
+
+    // Enhanced navbar scroll effect
+    let lastScrollTop = 0;
+
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+      if (scrollTop > lastScrollTop && scrollTop > 100) {
+        // Scrolling down
+        navbar.style.transform = 'translateY(-100%)';
+      } else {
+        // Scrolling up
+        navbar.style.transform = 'translateY(0)';
+      }
+
+      lastScrollTop = scrollTop;
+    });
+
+    // Loader hide and content show
+    window.addEventListener('load', () => {
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      const mainContent = document.getElementById('mainContent');
+
+      setTimeout(() => {
+        loadingOverlay.classList.add('hidden'); // hide loader
+        setTimeout(() => {
+          mainContent.classList.add('show-content'); // show content
+        }, 600);
+      }, 1500); // loader duration
+    });
+
+    // Create particle background
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 15;
+
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+
+        // Random properties
+        const size = Math.random() * 20 + 5;
+        const posX = Math.random() * 100;
+        const posY = Math.random() * 100;
+        const delay = Math.random() * 15;
+        const duration = Math.random() * 10 + 15;
+
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${posX}vw`;
+        particle.style.top = `${posY}vh`;
+        particle.style.animationDelay = `${delay}s`;
+        particle.style.animationDuration = `${duration}s`;
+        particle.style.opacity = Math.random() * 0.4 + 0.1;
+
+        particlesContainer.appendChild(particle);
+      }
+    }
+
+    // Set active nav link based on scroll position
+    function setActiveNavLink() {
+      const sections = document.querySelectorAll('section');
+      const navLinks = document.querySelectorAll('.nav-link');
+
+      let currentSection = '';
+
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+
+        if (window.scrollY >= sectionTop - 100) {
+          currentSection = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${currentSection}`) {
+          link.classList.add('active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', setActiveNavLink);
+
+  </script>
+</body>
+
+</html>
