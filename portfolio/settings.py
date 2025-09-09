@@ -1,30 +1,23 @@
 from pathlib import Path
-import os
 from decouple import config
 
-# ===========================
-# Base Directory
-# ===========================
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ===========================
 # Security
 # ===========================
-SECRET_KEY = config('SECRET_KEY', default='replace-this-with-env-secret')
+SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-# ===========================
-# Hosts and CSRF
-# ===========================
 if DEBUG:
     ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
     CSRF_TRUSTED_ORIGINS = []
 else:
-    ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='').split(',')  # Example: 'portfoliobydjango-ajs.up.railway.app'
-    CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='').split(',')  # Example: 'https://portfoliobydjango-ajs.up.railway.app'
+    ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
+    CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS').split(',')
 
 # ===========================
-# Installed Apps
+# Apps & Middleware
 # ===========================
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -33,15 +26,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core',  # Your app
+    'core',
 ]
 
-# ===========================
-# Middleware
-# ===========================
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Static files for production
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # production static files
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -50,9 +40,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# ===========================
-# URL & WSGI
-# ===========================
 ROOT_URLCONF = 'portfolio.urls'
 WSGI_APPLICATION = 'portfolio.wsgi.application'
 
@@ -76,7 +63,7 @@ TEMPLATES = [
 ]
 
 # ===========================
-# Database (SQLite default, change to PostgreSQL for production)
+# Database (SQLite default)
 # ===========================
 DATABASES = {
     'default': {
@@ -89,10 +76,10 @@ DATABASES = {
 # Password Validators
 # ===========================
 AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 # ===========================
@@ -114,7 +101,4 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# ===========================
-# Default Primary Key Field Type
-# ===========================
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
