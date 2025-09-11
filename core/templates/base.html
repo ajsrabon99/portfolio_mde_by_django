@@ -5,8 +5,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}AJ Srabon - Full Stack Developer{% endblock %}</title>
+  <!-- Favicon (logo from link) -->
+  <link rel="icon" type="image/png"
+    href="https://i.postimg.cc/dVJjxx6H/Whats-App-Image-2025-09-08-at-19-42-33-0ce37595-removebg-preview.png">
 
+  <title>{% block title %}AJ Srabon - Full Stack Developer{% endblock %}</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -69,10 +72,11 @@
       z-index: -1;
     }
 
-    /* Enhanced Navbar */
+    /* Enhanced Navbar Styles */
     .navbar-modern {
       background: rgba(255, 255, 255, 0.95) !important;
       backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.2);
       padding: 0.8rem 0;
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -83,34 +87,126 @@
     .navbar-modern.scrolled {
       padding: 0.5rem 0;
       backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     }
 
     .dark-mode .navbar-modern {
-      background: rgba(26, 26, 29, 0.95) !important;
-      border-bottom: 1px solid #333;
+      background: rgba(15, 23, 42, 0.95) !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       color: white;
     }
 
-    .navbar-brand img {
+    /* Brand styling */
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+
+    .brand-logo {
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       border-radius: 10%;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.1));
     }
 
-    .navbar-brand:hover img {
+    .brand-text {
+      font-weight: 700;
+      margin-left: 10px;
+      font-size: 1.4rem;
+      background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      opacity: 0;
+      transform: translateX(-10px);
+      transition: all 0.4s ease;
+    }
+
+    .navbar-brand:hover .brand-logo {
       transform: scale(1.05) rotate(5deg);
     }
 
+    .navbar-brand:hover .brand-text {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Custom animated toggler */
+    .custom-toggler {
+      border: none;
+      padding: 0.5rem;
+      width: 45px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: transparent;
+      transition: all 0.3s ease;
+    }
+
+    .custom-toggler:hover {
+      background: rgba(99, 102, 241, 0.1);
+    }
+
+    .dark-mode .custom-toggler:hover {
+      background: rgba(99, 102, 241, 0.2);
+    }
+
+    .animated-icon {
+      width: 24px;
+      height: 18px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .toggler-bar {
+      display: block;
+      height: 2px;
+      width: 100%;
+      border-radius: 2px;
+      background: #121212;
+      transition: all 0.3s ease;
+      transform-origin: center;
+    }
+
+    .dark-mode .toggler-bar {
+      background: #fff;
+    }
+
+    /* Toggler animation when active */
+    .custom-toggler[aria-expanded="true"] .toggler-bar-1 {
+      transform: translateY(8px) rotate(45deg);
+    }
+
+    .custom-toggler[aria-expanded="true"] .toggler-bar-2 {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+
+    .custom-toggler[aria-expanded="true"] .toggler-bar-3 {
+      transform: translateY(-8px) rotate(-45deg);
+    }
+
+    /* Nav items */
     .nav-link {
       font-weight: 500;
       margin: 0 0.3rem;
-      padding: 0.5rem 1rem !important;
+      padding: 0.6rem 1.2rem !important;
       border-radius: 25px;
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
-      color: #121212;
+      color: #121212 !important;
+      display: flex;
+      align-items: center;
+    }
+
+    .dark-mode .nav-link {
+      color: white !important;
     }
 
     .nav-link::before {
@@ -120,7 +216,7 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: var(--primary-gradient);
+      background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
       transition: left 0.4s ease;
       z-index: -1;
       border-radius: 25px;
@@ -137,75 +233,155 @@
 
     /* Active nav link */
     .nav-link.active {
-      background: var(--primary-gradient);
+      background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
       color: white !important;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
     }
 
-    /* Dark mode nav-links */
-    .dark-mode .nav-link {
-      color: white !important;
-    }
-
-    .dark-mode .nav-link:hover {
-      color: white !important;
-    }
-
-    /* Dark Mode Toggle */
+    /* Dark mode toggle */
     .dark-toggle {
-      position: relative;
       width: 50px;
-      height: 25px;
-      background: var(--primary-gradient);
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .dark-toggle::before {
-      content: '';
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      width: 21px;
-      height: 21px;
-      background: white;
+      height: 50px;
       border-radius: 50%;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      border: none;
+      background: rgba(99, 102, 241, 0.1);
+      color: #6366f1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
     }
 
-    .dark-mode .dark-toggle::before {
-      transform: translateX(25px);
-    }
-
-    .dark-toggle i {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 12px;
-      transition: all 0.3s ease;
-    }
-
-    .dark-toggle .fa-moon {
-      left: 6px;
+    .dark-toggle:hover {
+      background: #6366f1;
       color: white;
-      opacity: 1;
+      transform: rotate(15deg);
+    }
+
+    .dark-toggle-inner {
+      position: relative;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .dark-toggle .fa-sun {
-      right: 6px;
-      color: #fbbf24;
+      position: absolute;
       opacity: 0;
+      transform: scale(0) rotate(90deg);
+      transition: all 0.4s ease;
     }
 
-    .dark-mode .dark-toggle .fa-moon {
-      opacity: 0;
+    .dark-toggle .fa-moon {
+      opacity: 1;
+      transform: scale(1) rotate(0);
+      transition: all 0.4s ease;
+    }
+
+    .dark-mode .dark-toggle {
+      background: rgba(99, 102, 241, 0.2);
+      color: #818cf8;
+    }
+
+    .dark-mode .dark-toggle:hover {
+      background: #818cf8;
+      color: white;
     }
 
     .dark-mode .dark-toggle .fa-sun {
       opacity: 1;
+      transform: scale(1) rotate(0);
+    }
+
+    .dark-mode .dark-toggle .fa-moon {
+      opacity: 0;
+      transform: scale(0) rotate(-90deg);
+    }
+
+    @media (max-width: 991.98px) {
+      #navbarNav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(30px);
+        padding: 80px 30px 30px;
+        transition: right 0.4s ease;
+        display: flex;
+        flex-direction: column;
+        z-index: 1040;
+      }
+
+      .dark-mode #navbarNav {
+        background: rgba(15, 23, 42, 0.95) !important;
+
+      }
+
+      #navbarNav.show {
+        right: 0;
+      }
+
+      .navbar-nav {
+        flex-direction: column !important;
+        width: 100%;
+      }
+
+      .nav-item {
+        margin-bottom: 15px;
+      }
+
+      .nav-link {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .navbar-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        border: none;
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: #121212;
+        cursor: pointer;
+        z-index: 1050;
+      }
+
+      .navbar-close:hover {
+        background: rgba(99, 102, 241, 0.1);
+        transform: rotate(90deg);
+      }
+
+      .dark-mode .navbar-close {
+        color: rgb(255, 255, 255);
+      }
+    }
+
+    @media (min-width: 992px) {
+      #navbarNav {
+        position: static !important;
+        height: auto;
+        display: flex !important;
+        flex-direction: row !important;
+        background: transparent !important;
+        right: 0 !important;
+        overflow: visible !important;
+      }
+
+      .navbar-close {
+        display: none !important;
+      }
     }
 
     /* Enhanced Cards */
@@ -271,12 +447,239 @@
       background: rgba(255, 255, 255, 0.05);
     }
 
-    /* Enhanced Footer */
+    /* Footer Styles */
     .footer-modern {
-      background: rgba(0, 0, 0, 0.9);
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #e2e8f0;
+      padding: 60px 0 0;
+      font-family: 'Inter', sans-serif;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .footer-modern::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #6366f1, transparent);
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      margin-bottom: 50px;
+    }
+
+    .footer-section {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .logo-img {
+      width: 36px;
+      height: 36px;
+      margin-right: 12px;
+    }
+
+    .logo-text {
+      font-weight: 700;
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .footer-description {
+      line-height: 1.6;
+      margin-bottom: 25px;
+      color: #94a3b8;
+      max-width: 280px;
+    }
+
+    .footer-heading {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .footer-heading::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: linear-gradient(90deg, #6366f1, transparent);
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-links li {
+      margin-bottom: 12px;
+    }
+
+    .footer-links a {
+      color: #94a3b8;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      position: relative;
+      padding-left: 0;
+    }
+
+    .footer-links a:hover {
+      color: #6366f1;
+      padding-left: 8px;
+    }
+
+    .footer-links a::before {
+      content: '→';
+      position: absolute;
+      left: -15px;
+      opacity: 0;
+      transition: all 0.3s ease;
+      color: #6366f1;
+    }
+
+    .footer-links a:hover::before {
+      opacity: 1;
+      left: -12px;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #94a3b8;
+    }
+
+    .contact-item i {
+      color: #6366f1;
+      width: 20px;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(99, 102, 241, 0.1);
+      color: #6366f1;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .social-link:hover {
+      background: #6366f1;
       color: white;
-      backdrop-filter: blur(20px);
-      margin-top: 5rem;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid #334155;
+      padding: 25px 0;
+    }
+
+    .footer-bottom-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-bottom p {
+      margin: 0;
+      color: #94a3b8;
+    }
+
+    .footer-legal {
+      display: flex;
+      gap: 25px;
+    }
+
+    .footer-legal a {
+      color: #94a3b8;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .footer-legal a:hover {
+      color: #6366f1;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+      .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+
+      .footer-bottom-content {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .footer-legal {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .footer-modern {
+        padding: 40px 0 0;
+      }
+
+      .footer-legal {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .social-links {
+        justify-content: center;
+      }
     }
 
     .dark-mode .footer-modern {
@@ -669,35 +1072,39 @@
   <!-- Particle Background -->
   <div class="particles-container" id="particles"></div>
 
-  <!-- Enhanced Navbar -->
+  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-modern fixed-top" id="mainNavbar">
     <div class="container">
-      <a class="navbar-brand" href="#hero">
+      <a class="navbar-brand" href="{% url 'home' %}#hero">
         <img src="https://i.postimg.cc/dVJjxx6H/Whats-App-Image-2025-09-08-at-19-42-33-0ce37595-removebg-preview.png"
-          alt="AJ Srabon" height="75">
+          alt="AJ Srabon" height="75" class="brand-logo">
+        <span class="brand-text">AJ Srabon</span>
       </a>
 
-      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+      <!-- Navbar Toggler -->
+      <button class="navbar-toggler custom-toggler" type="button" aria-label="Toggle navigation" id="navbarToggler">
+        <div class="animated-icon">
+          <span class="toggler-bar toggler-bar-1"></span>
+          <span class="toggler-bar toggler-bar-2"></span>
+          <span class="toggler-bar toggler-bar-3"></span>
+        </div>
       </button>
 
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto me-4">
-          <li class="nav-item"><a class="nav-link" href="#hero"><i class="fas fa-home me-1"></i>Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="#about"><i class="fas fa-user me-1"></i>About</a></li>
-          <li class="nav-item"><a class="nav-link" href="#skills"><i class="fas fa-code me-1"></i>Skills</a></li>
-          <li class="nav-item"><a class="nav-link" href="#education"><i
-                class="fas fa-graduation-cap me-1"></i>Education</a></li>
-          <li class="nav-item"><a class="nav-link" href="#projects"><i class="fas fa-folder-open me-1"></i>Projects</a>
-          </li>
-          <li class="nav-item"><a class="nav-link" href="#contact"><i class="fas fa-envelope me-1"></i>Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#hero">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#about">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#skills">Skills</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#education">Education</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'contact_page' %}">Contact</a></li>
         </ul>
 
         <!-- Dark Mode Toggle -->
         <button id="darkToggle" class="dark-toggle">
-          <i class="fas fa-moon"></i>
-          <i class="fas fa-sun"></i>
+          <span class="dark-toggle-inner">
+            <i class="fas fa-moon"></i>
+            <i class="fas fa-sun"></i>
+          </span>
         </button>
       </div>
     </div>
@@ -772,12 +1179,76 @@
     {% endblock %}
   </main>
 
-  <!-- Enhanced Footer -->
-  <footer class="footer-modern text-center py-4">
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <p class="mb-2">&copy; 2025 AJ Srabon. All rights reserved.</p>
+  <footer class="footer-modern">
+    <div class="footer-container">
+      <!-- Main Footer Content -->
+      <div class="footer-content">
+        <div class="footer-section">
+          <div class="footer-logo">
+            <img
+              src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAzMCAzMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE1IDI3LjVDMjEuOTA0NiAyNy41IDI3LjUgMjEuOTA0NiAyNy41IDE1QzI3LjUgOC4wOTU0NCAyMS45MDQ2IDIuNSAxNSAyLjVDOC4wOTU0NCAyLjUgMi41IDguMDk1NDQgMi41IDE1QzIuNSAyMS45MDQ2IDguMDk1NDQgMjcuNSAxNSAyNy41WiIgc3Ryb2tlPSIjNjM2NmYxIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8cGF0aCBkPSJNMTUgNy41VjE1LjVIMjAuNSIgc3Ryb2tlPSIjNjM2NmYxIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K"
+              alt="Logo" class="logo-img">
+            <span class="logo-text">AJ Srabon</span>
+          </div>
+          <p class="footer-description">Creating innovative solutions with modern technology and design.</p>
+          <div class="social-links">
+            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-dribbble"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-section">
+          <h4 class="footer-heading">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Portfolio</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4 class="footer-heading">Services</h4>
+          <ul class="footer-links">
+            <li><a href="#">Web Development</a></li>
+            <li><a href="#">UI/UX Design</a></li>
+            <li><a href="#">Mobile Apps</a></li>
+            <li><a href="#">Digital Marketing</a></li>
+            <li><a href="#">Consulting</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4 class="footer-heading">Contact Info</h4>
+          <div class="contact-info">
+            <div class="contact-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>Dhaka, Bangladesh</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-envelope"></i>
+              <span>contact@ajsrabon.com</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-phone"></i>
+              <span>+880 1234 567890</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <div class="footer-bottom-content">
+          <p>&copy; 2025 AJ Srabon. All rights reserved.</p>
+          <div class="footer-legal">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Cookie Policy</a>
+          </div>
         </div>
       </div>
     </div>
@@ -792,186 +1263,193 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    // Dark mode functionality
-    const darkToggle = document.getElementById('darkToggle');
-    const body = document.body;
-    const scrollTopBtn = document.getElementById('scrollTop');
-    const navbar = document.getElementById('mainNavbar');
+    document.addEventListener('DOMContentLoaded', function () {
+      const navbar = document.getElementById('mainNavbar');
+      const toggler = document.getElementById('navbarToggler');
+      const navbarNav = document.getElementById('navbarNav');
+      const darkToggle = document.getElementById('darkToggle');
+      const body = document.body;
+      const scrollTopBtn = document.getElementById('scrollTop');
+      const sections = document.querySelectorAll('section[id]');
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      const mainContent = document.getElementById('mainContent');
+      let closeButton;
 
-    // Load saved theme
-    const savedTheme = sessionStorage.getItem('darkMode');
-    if (savedTheme === 'enabled') {
-      body.classList.add('dark-mode');
-    }
-
-    // Dark mode toggle
-    darkToggle.addEventListener('click', () => {
-      body.classList.toggle('dark-mode');
-
-      if (body.classList.contains('dark-mode')) {
-        sessionStorage.setItem('darkMode', 'enabled');
-      } else {
-        sessionStorage.setItem('darkMode', 'disabled');
-      }
-    });
-
-    // Scroll to top functionality
-    window.addEventListener('scroll', () => {
-      if (window.pageYOffset > 300) {
-        scrollTopBtn.classList.add('visible');
-      } else {
-        scrollTopBtn.classList.remove('visible');
-      }
-
+      // =========================
       // Navbar scroll effect
-      if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-      } else {
-        navbar.classList.remove('scrolled');
+      // =========================
+      function handleNavbarScroll() {
+        if (window.scrollY > 50) navbar.classList.add('scrolled');
+        else navbar.classList.remove('scrolled');
       }
-    });
+      window.addEventListener('scroll', handleNavbarScroll);
 
-    scrollTopBtn.addEventListener('click', () => {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    });
+      // =========================
+      // Mobile menu toggle
+      // =========================
+      function createCloseButton() {
+        if (!closeButton) {
+          closeButton = document.createElement('button');
+          closeButton.className = 'navbar-close';
+          closeButton.innerHTML = '<i class="fas fa-times"></i>';
+          closeButton.setAttribute('aria-label', 'Close menu');
+          navbarNav.appendChild(closeButton);
+          closeButton.addEventListener('click', closeMobileMenu);
+        }
+      }
 
-    // Smooth scrolling for navigation links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
+      function toggleMobileMenu() {
+        const isShown = navbarNav.classList.contains('show');
+        if (!isShown) {
+          createCloseButton();
+          navbarNav.classList.add('show');
+          document.body.style.overflow = 'hidden';
+          toggler.setAttribute('aria-expanded', 'true');
+        } else closeMobileMenu();
+      }
+
+      function closeMobileMenu() {
+        navbarNav.classList.remove('show');
+        document.body.style.overflow = 'auto';
+        if (toggler) toggler.setAttribute('aria-expanded', 'false');
+      }
+
+      function setupMobileMenu() {
+        if (window.innerWidth < 992) {
+          if (toggler) toggler.addEventListener('click', toggleMobileMenu);
+          navbarNav.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', closeMobileMenu);
           });
+        }
+      }
 
-          // Close navbar on mobile after click
-          const navbarToggler = document.querySelector('.navbar-toggler');
-          const navbarCollapse = document.querySelector('.navbar-collapse');
-          if (navbarCollapse.classList.contains('show')) {
-            navbarToggler.click();
+      setupMobileMenu();
+      window.addEventListener('resize', () => {
+        if (window.innerWidth >= 992) closeMobileMenu();
+        else setupMobileMenu();
+      });
+
+      // =========================
+      // Dark mode toggle
+      // =========================
+      if (sessionStorage.getItem('darkMode') === 'enabled') body.classList.add('dark-mode');
+
+      if (darkToggle) {
+        darkToggle.addEventListener('click', () => {
+          body.classList.toggle('dark-mode');
+          sessionStorage.setItem('darkMode', body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
+        });
+      }
+
+      // =========================
+      // Scroll to top button
+      // =========================
+      if (scrollTopBtn) {
+        window.addEventListener('scroll', () => {
+          if (window.pageYOffset > 300) scrollTopBtn.classList.add('visible');
+          else scrollTopBtn.classList.remove('visible');
+        });
+        scrollTopBtn.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      // =========================
+      // Smooth scroll for anchor links
+      // =========================
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          if (navbarNav.classList.contains('show')) closeMobileMenu();
+        });
+      });
+
+      // =========================
+      // Fade-in animation for cards
+      // =========================
+      const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
           }
-        }
-      });
-    });
+        });
+      }, observerOptions);
 
-    // Add fade-in animation to elements when they come into view
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
-        }
-      });
-    }, observerOptions);
-
-    // Observe all cards for animation
-    document.addEventListener('DOMContentLoaded', () => {
-      const cards = document.querySelectorAll('.card-modern');
-      cards.forEach(card => {
+      document.querySelectorAll('.card-modern').forEach(card => {
         card.style.opacity = '0';
         card.style.transform = 'translateY(30px)';
         card.style.transition = 'all 0.6s ease-out';
         observer.observe(card);
       });
 
-      // Create particle background
+      // =========================
+      // Particle background
+      // =========================
+      function createParticles() {
+        const particlesContainer = document.getElementById('particles');
+        if (!particlesContainer) return;
+        const particleCount = 15;
+        for (let i = 0; i < particleCount; i++) {
+          const particle = document.createElement('div');
+          particle.classList.add('particle');
+          const size = Math.random() * 20 + 5;
+          const posX = Math.random() * 100;
+          const posY = Math.random() * 100;
+          const delay = Math.random() * 15;
+          const duration = Math.random() * 10 + 15;
+          particle.style.width = `${size}px`;
+          particle.style.height = `${size}px`;
+          particle.style.left = `${posX}vw`;
+          particle.style.top = `${posY}vh`;
+          particle.style.animationDelay = `${delay}s`;
+          particle.style.animationDuration = `${duration}s`;
+          particle.style.opacity = Math.random() * 0.4 + 0.1;
+          particlesContainer.appendChild(particle);
+        }
+      }
       createParticles();
-    });
 
-    // Enhanced navbar scroll effect
-    let lastScrollTop = 0;
-
-    window.addEventListener('scroll', () => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-      if (scrollTop > lastScrollTop && scrollTop > 100) {
-        // Scrolling down
-        navbar.style.transform = 'translateY(-100%)';
-      } else {
-        // Scrolling up
-        navbar.style.transform = 'translateY(0)';
+      // =========================
+      // Active nav link highlighting
+      // =========================
+      function setActiveNavLink() {
+        let currentSection = '';
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          if (window.scrollY >= sectionTop - 100) currentSection = section.getAttribute('id');
+        });
+        document.querySelectorAll('.nav-link').forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href').includes(`#${currentSection}`)) link.classList.add('active');
+        });
       }
+      window.addEventListener('scroll', setActiveNavLink);
 
-      lastScrollTop = scrollTop;
-    });
+      // =========================
+      // Navbar hide/show on scroll
+      // =========================
+      let lastScrollTop = 0;
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        if (scrollTop > lastScrollTop && scrollTop > 100) navbar.style.transform = 'translateY(-100%)';
+        else navbar.style.transform = 'translateY(0)';
+        lastScrollTop = scrollTop;
+      });
 
-    // Loader hide and content show
-    window.addEventListener('load', () => {
-      const loadingOverlay = document.getElementById('loadingOverlay');
-      const mainContent = document.getElementById('mainContent');
-
-      setTimeout(() => {
-        loadingOverlay.classList.add('hidden'); // hide loader
+      // =========================
+      // Loader
+      // =========================
+      window.addEventListener('load', () => {
         setTimeout(() => {
-          mainContent.classList.add('show-content'); // show content
-        }, 600);
-      }, 1500); // loader duration
+          if (loadingOverlay) loadingOverlay.classList.add('hidden');
+          if (mainContent) setTimeout(() => mainContent.classList.add('show-content'), 600);
+        }, 1500);
+      });
     });
-
-    // Create particle background
-    function createParticles() {
-      const particlesContainer = document.getElementById('particles');
-      const particleCount = 15;
-
-      for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.classList.add('particle');
-
-        // Random properties
-        const size = Math.random() * 20 + 5;
-        const posX = Math.random() * 100;
-        const posY = Math.random() * 100;
-        const delay = Math.random() * 15;
-        const duration = Math.random() * 10 + 15;
-
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        particle.style.left = `${posX}vw`;
-        particle.style.top = `${posY}vh`;
-        particle.style.animationDelay = `${delay}s`;
-        particle.style.animationDuration = `${duration}s`;
-        particle.style.opacity = Math.random() * 0.4 + 0.1;
-
-        particlesContainer.appendChild(particle);
-      }
-    }
-
-    // Set active nav link based on scroll position
-    function setActiveNavLink() {
-      const sections = document.querySelectorAll('section');
-      const navLinks = document.querySelectorAll('.nav-link');
-
-      let currentSection = '';
-
-      sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-
-        if (window.scrollY >= sectionTop - 100) {
-          currentSection = section.getAttribute('id');
-        }
-      });
-
-      navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === `#${currentSection}`) {
-          link.classList.add('active');
-        }
-      });
-    }
-
-    window.addEventListener('scroll', setActiveNavLink);
-
   </script>
 </body>
 
