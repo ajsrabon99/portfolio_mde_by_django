@@ -1,25 +1,37 @@
+import os
 from pathlib import Path
 from decouple import config, Csv
-import os
 
+# ===========================
+# Paths
+# ===========================
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ===========================
 # Security
 # ===========================
-# Try env variable first, fallback to .env via decouple
-SECRET_KEY = os.environ.get('SECRET_KEY') or config('SECRET_KEY')
+# SECRET_KEY
+SECRET_KEY = os.environ.get('SECRET_KEY', config('SECRET_KEY'))
+
+# DEBUG mode
 DEBUG = os.environ.get('DEBUG', config('DEBUG', default=True, cast=bool))
 
+# Allowed hosts and CSRF trusted origins
 if DEBUG:
     ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
     CSRF_TRUSTED_ORIGINS = []
 else:
-    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', config('ALLOWED_HOSTS', default='')).split(',')
-    CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', config('CSRF_TRUSTED_ORIGINS', default='')).split(',')
+    ALLOWED_HOSTS = os.environ.get(
+        'ALLOWED_HOSTS',
+        ','.join(config('ALLOWED_HOSTS', cast=Csv()))
+    ).split(',')
+    CSRF_TRUSTED_ORIGINS = os.environ.get(
+        'CSRF_TRUSTED_ORIGINS',
+        ','.join(config('CSRF_TRUSTED_ORIGINS', cast=Csv()))
+    ).split(',')
 
 # ===========================
-# Apps & Middleware
+# Installed Apps & Middleware
 # ===========================
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -28,12 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core',
+    'core',  # Your app
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # production static files
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # static files in production
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -65,7 +77,7 @@ TEMPLATES = [
 ]
 
 # ===========================
-# Database (SQLite default)
+# Database
 # ===========================
 DATABASES = {
     'default': {
@@ -75,7 +87,7 @@ DATABASES = {
 }
 
 # ===========================
-# Password Validators
+# Password validators
 # ===========================
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -93,7 +105,7 @@ USE_I18N = True
 USE_TZ = True
 
 # ===========================
-# Static & Media
+# Static & Media files
 # ===========================
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
@@ -103,4 +115,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# ===========================
+# Default auto field
+# ===========================
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
