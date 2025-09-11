@@ -1,20 +1,22 @@
 from pathlib import Path
-from decouple import config
+from decouple import config, Csv
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ===========================
 # Security
 # ===========================
-SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', default=True, cast=bool)
+# Try env variable first, fallback to .env via decouple
+SECRET_KEY = os.environ.get('SECRET_KEY') or config('SECRET_KEY')
+DEBUG = os.environ.get('DEBUG', config('DEBUG', default=True, cast=bool))
 
 if DEBUG:
     ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
     CSRF_TRUSTED_ORIGINS = []
 else:
-    ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
-    CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS').split(',')
+    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', config('ALLOWED_HOSTS', default='')).split(',')
+    CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', config('CSRF_TRUSTED_ORIGINS', default='')).split(',')
 
 # ===========================
 # Apps & Middleware
