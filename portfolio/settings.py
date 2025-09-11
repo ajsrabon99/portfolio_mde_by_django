@@ -11,10 +11,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security
 # ===========================
 # SECRET_KEY
-SECRET_KEY = os.environ.get('SECRET_KEY', config('SECRET_KEY'))
+SECRET_KEY = os.environ.get('SECRET_KEY') or config('SECRET_KEY', default=None)
+if not SECRET_KEY:
+    raise ValueError("SECRET_KEY environment variable not set!")
 
 # DEBUG mode
-DEBUG = os.environ.get('DEBUG', config('DEBUG', default=True, cast=bool))
+DEBUG = os.environ.get('DEBUG', None)
+if DEBUG is None:
+    DEBUG = config('DEBUG', default=True, cast=bool)
+else:
+    DEBUG = DEBUG == 'True'
 
 # Allowed hosts and CSRF trusted origins
 if DEBUG:
@@ -23,12 +29,12 @@ if DEBUG:
 else:
     ALLOWED_HOSTS = os.environ.get(
         'ALLOWED_HOSTS',
-        ','.join(config('ALLOWED_HOSTS', cast=Csv()))
+        ','.join(config('ALLOWED_HOSTS', cast=Csv(), default='localhost,127.0.0.1'))
     ).split(',')
     CSRF_TRUSTED_ORIGINS = os.environ.get(
         'CSRF_TRUSTED_ORIGINS',
-        ','.join(config('CSRF_TRUSTED_ORIGINS', cast=Csv()))
-    ).split(',')
+        ','.join(config('CSRF_TRUSTED_ORIGINS', cast=Csv(), default=''))
+    ).split(',') if os.environ.get('CSRF_TRUSTED_ORIGINS') or config('CSRF_TRUSTED_ORIGINS', default='') else []
 
 # ===========================
 # Installed Apps & Middleware
